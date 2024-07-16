@@ -28,4 +28,20 @@ void Value::Backward() {
   }
 }
 
+// Addition operator
+ValuePtr Value::operator+(const std::shared_ptr<Value> &other) const {
+  ValuePtr other_value = other ? other : std::make_shared<Value>(0.0);
+  ValuePtr out = std::make_shared<Value>(
+      data_ + other_value->data_, std::set<ValuePtr>{shared_from_this(), other_value}, "+");
+
+  auto backward = [out, this, other_value]() {
+    // can change class's internal value
+    const_cast<double&>(this->grad_) += out->grad_;
+    const_cast<double&>(other_value->grad_) += out->grad_;
+  };
+  out->backward_ = backward;
+
+  return out;
+}
+
 } // namespace engine

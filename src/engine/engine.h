@@ -12,7 +12,8 @@ public:
   // Constructor
   Value(double data, std::set<std::shared_ptr<Value>> children = {},
         const std::string &op = "")
-      : data_(data), grad_(0), op_(op), prev_(std::move(children)) {}
+      : data_(data), grad_(0), backward_([]() {}), prev_(std::move(children)),
+        op_(op) {}
 
   // Addition operator
   std::shared_ptr<Value> operator+(const std::shared_ptr<Value> &other) const;
