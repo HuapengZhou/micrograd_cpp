@@ -10,6 +10,7 @@ using ValuePtr = std::shared_ptr<Value>;
 void Value::Backward() {
   std::set<ValuePtr> visited_set;
   std::vector<ValuePtr> reversed_value_ptrs = {};
+  // backtrack to get reversed topo flow
   std::function<void(ValuePtr)> build_topo = [&](const ValuePtr &value_ptr) {
     if (!visited_set.count(value_ptr)) {
       visited_set.insert(value_ptr);
